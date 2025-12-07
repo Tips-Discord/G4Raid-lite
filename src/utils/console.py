@@ -115,7 +115,7 @@ class Console:
         final_output = full_menu.replace('»', f'{co.main}»{co.reset}') \
                                 .replace('«', f'{co.main}«{co.reset}')
 
-        print(final_output)
+        print(final_output + '\n')
 
     def input(self, text: str, expected: type = str) -> Any:
         module_tag = f'{co.main}[{co.reset}{self.module}{co.main}] ' if self.module else ''
