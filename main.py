@@ -36,7 +36,6 @@ while True:
     choice = console.input('Option', str)
 
     options = {
-        'SU': suppliers().menu,
         'su': suppliers().menu,
         'SC': lambda: logger.paidonly(),
         'sc': lambda: logger.paidonly(),
@@ -61,7 +60,9 @@ while True:
         '19': lambda: logger.info('Not implemented yet', 'Menu'),
         '20': verifybypasses().menu,
     }
-     
+
+    choice = (str(int(choice)) if choice.startswith('0') and len(choice) == 2 else choice).lower()
+    
     if choice in options:
         try:
             options[choice]()
