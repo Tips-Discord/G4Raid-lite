@@ -8,14 +8,14 @@ class files:
     def check():
         filestomake = [
             'data',
-            'data\\scrapes',
-            'data\\tokenchecker',
-            'data\\stats'
+            os.path.join('data', 'scrapes'),
+            os.path.join('data', 'tokenchecker'),
+            os.path.join('data', 'stats')
         ]
 
         folderstomake = [
-            'data\\tokens.txt',
-            'data\\proxies.txt'
+            os.path.join('data', 'tokens.txt'),
+            os.path.join('data', 'proxies.txt')
         ]
 
         for path in filestomake:
@@ -50,7 +50,7 @@ class files:
         tokens = []
 
         try:
-            with open('data\\tokens.txt', 'r', encoding='utf-8', errors='ignore') as f:
+            with open(os.path.join('data', 'tokens.txt'), 'r', encoding='utf-8', errors='ignore') as f:
                 lines = f.read().splitlines()
                 for line in lines:
                     if not line.strip():
