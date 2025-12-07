@@ -1,8 +1,8 @@
 from src import *
 from src.utils.files import files
-from src.utils.console import console
+from src.utils.console import Console
 from src.utils.threading import threading
-from src.utils.logging import logger
+from src.utils.logging import Logger
 from src.utils.discord import discord
 from src.utils.sessionmanager import client as Client
 
@@ -13,7 +13,7 @@ def format_token(t):
 
 class checker:
     def __init__(self):
-        self.console = console('Checker')
+        self.console = Console('Checker')
         self.getinfo = False
         self.valids = []
         self.failed = []
@@ -32,26 +32,27 @@ class checker:
                 )
 
                 if r.status_code == 200:
-                    logger.success(f'{client.maskedtoken} » MFA » ? EV » ? Email » ? Phone » ? Boosts » ? Age » ? days (get paid to see info)')
+                    Logger.success(f'{client.maskedtoken} » MFA » ? EV » ? Email » ? Phone » ? Boosts » ? Age » ? days (get paid to see info)')
                     self.valids.append(token_obj)
                     break
 
                 elif 'retry_after' in r.text:
                     ratelimit = r.json().get('retry_after', 1.5)
-                    logger.ratelimit(f'{client.maskedtoken} » {ratelimit}s')
+                    Logger.ratelimit(f'{client.maskedtoken} » {ratelimit}s')
                     discord.sleep(ratelimit)
 
                 elif 'Try again later' in r.text:
-                    logger.ratelimit(f'{client.maskedtoken} » 5s')
+                    ratelimit = r.json().get('retry_after', 1.5)
+                    Logger.ratelimit(f'{client.maskedtoken} » 5s')
                     discord.sleep(5)
 
                 elif 'Cloudflare' in r.text:
-                    logger.cloudflare(f'{client.maskedtoken} » 10s')
+                    Logger.cloudflare(f'{client.maskedtoken} » 10s')
                     discord.sleep(10)
 
                 else:
                     e, etype = discord.errordatabase(r.text)
-                    logger.error(f'{client.maskedtoken} » {e}')
+                    Logger.error(f'{client.maskedtoken} » {e}')
                     if etype == discord.LOCKED_ACCOUNT:
                         self.locked.append(token_obj)
                     else:
@@ -59,7 +60,7 @@ class checker:
                     break
 
         except Exception as e:
-            logger.error(f'{client.maskedtoken} » {e}')
+            Logger.error(f'{client.maskedtoken} » {e}')
             self.failed.append(token_obj)
 
     def run(self, token_obj):
@@ -72,9 +73,9 @@ class checker:
         self.delay = self.console.input('Delay', float)
         self.getinfo = self.console.input('Get all info and fully sort', bool)
         if self.getinfo:
-            logger.info('Token sorting and info is anvaible in the paid version only')
-            logger.info('Token sorting and info is anvaible in the paid version only')
-            logger.info('Token sorting and info is anvaible in the paid version only')
+            Logger.info('Token sorting and info is anvaible in the paid version only')
+            Logger.info('Token sorting and info is anvaible in the paid version only')
+            Logger.info('Token sorting and info is anvaible in the paid version only')
 
         threading(
             func=self.run,

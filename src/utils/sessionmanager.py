@@ -1,7 +1,7 @@
 from src import *
 from src.utils.files import files
 from src.utils.config import get
-from src.utils.logging import logger
+from src.utils.logging import Logger
 tokendata = {}
 
 # NOT FULL CAUSE I DONT WANT TO LEAK IT AND GET SKIDS TO USE ITTT   
@@ -22,21 +22,21 @@ class responsewrapper:
             self.cookies = None
             self.error = error
 
-        logger.debug(f'Status » {self.status_code}')
-        logger.debug(f'Headers » {self.headers}')
-        logger.debug(f'Text » {self.text}')
-        logger.debug(f'Error » {self.error}')
+        Logger.debug(f'Status » {self.status_code}')
+        Logger.debug(f'Headers » {self.headers}')
+        Logger.debug(f'Text » {self.text}')
+        Logger.debug(f'Error » {self.error}')
     
     def json(self) -> dict:
         if self.error:
-            logger.debug(f'Failed to parse JSON » {self.error}')
+            Logger.debug(f'Failed to parse JSON » {self.error}')
             return {}
             
         try:
             return self._response.json()
         
         except Exception as e:
-            logger.debug(f'Failed to parse JSON » {e}')
+            Logger.debug(f'Failed to parse JSON » {e}')
             return {}
 
 class sessionwrapper:
@@ -93,7 +93,7 @@ class curlwrapper:
 class apibypassing_:
     # Before u complain its like this cause of skids lol
     def __init__(self):
-        logger.info('Initializing API bypassing', 'API')
+        Logger.info('Initializing API bypassing', 'API')
         self.cffiversion = 'chrome136'
         self.chromeversion = '140'
         self.fullchromeversion = '140.0.0.0'
@@ -180,7 +180,7 @@ class client:
 
     def updatecookies(self, cookiejar, cookiestr):
         if not self.cookiejar:
-            logger.debug(f'{self.maskedtoken} » Getting cookies')
+            Logger.debug(f'{self.maskedtoken} » Getting cookies')
             self.cookiejar, self.cookiestr = apibypassing.getcookie(self.headers, self.sess)
             
         self.headers['cookie'] = cookiestr
@@ -203,7 +203,7 @@ class client:
         if self.headers.get('x-context-properties'):
             del self.headers['x-context-properties']
     
-logger.info('Fetching discord related stuff', 'API')
+Logger.info('Fetching discord related stuff', 'API')
 for token in files.gettokens():
     tokendata[token.token] = {
         'cookiejar': None,

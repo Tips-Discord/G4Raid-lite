@@ -9,14 +9,14 @@
 # If you wana get more features with the cost of flgging ur stuff do but you will make ur tokens flagged
 
 from src import *
-from src.utils.rpc import RPC
-from src.utils.console import console
+from src.utils.rpc import DiscordRPC
+from src.utils.console import Console
 from src.utils.files import files; files.check()
 from src.utils.config import get
-from src.utils.logging import logger
+from src.utils.logging import Logger
 from src.utils.discord import discord
 from src.funcs import *
-console = console('Main')
+console = Console('Main')
 
 discord.sleep(0.5)
 console.cls()
@@ -24,40 +24,40 @@ console.title('G4Raid - g4tools.cc - discord.gg/spamming - Made by r3ci')
 console.printbanner()
 
 if get.debug.enabled():
-    logger.info('Debug mode enabled', 'Config')
+    Logger.info('Debug mode enabled', 'Config')
 while True:
+    DiscordRPC().update()
     console.title('G4Raid-lite - g4tools.cc - discord.gg/spamming - Made by r3ci')
     console.cls()
     console.printbanner()
     console.printbar(len(files.gettokens()), 0)
     console.printmenu()
-    logger.info(f'G4Raid-lite made by r3ci <3')
+    Logger.info(f'G4Raid-lite made by r3ci <3')
 
     choice = console.input('Option', str)
 
     options = {
         'su': suppliers().menu,
-        'SC': lambda: logger.paidonly(),
-        'sc': lambda: logger.paidonly(),
-        '1': lambda: logger.paidonly(),
+        'sc': lambda: Logger.paidonly(),
+        '1': lambda: Logger.paidonly(),
         '2': leaver().menu,
         '3': serverchecker().menu,
         '4': channelchecker().menu,
-        '5': lambda: logger.info('Will unpatch this soon', 'Menu'),
+        '5': lambda: Logger.info('Will unpatch this soon', 'Menu'),
         '6': channelspammer().menu,
-        '7': lambda: logger.paidonly(),
-        '8': lambda: logger.paidonly(),
-        '9': lambda: logger.paidonly(),
-        '10': lambda: logger.paidonly(),
+        '7': lambda: Logger.paidonly(),
+        '8': lambda: Logger.paidonly(),
+        '9': lambda: Logger.paidonly(),
+        '10': lambda: Logger.paidonly(),
         '11': checker().menu,
         '12': biochanger().menu,
-        '13': lambda: logger.paidonly(),
-        '14': lambda: logger.paidonly(),
+        '13': lambda: Logger.paidonly(),
+        '14': lambda: Logger.paidonly(),
         '15': displaynamechanger().menu,
         '16': nicknamechanger().menu,
-        '17': lambda: logger.paidonly(),
-        '18': lambda: logger.paidonly(),
-        '19': lambda: logger.info('Not implemented yet', 'Menu'),
+        '17': lambda: Logger.paidonly(),
+        '18': lambda: Logger.paidonly(),
+        '19': lambda: Logger.info('Not implemented yet', 'Menu'),
         '20': verifybypasses().menu,
     }
 
@@ -68,9 +68,9 @@ while True:
             options[choice]()
             
         except Exception as e:
-            logger.error(f'Failed to run {str(choice)} » {str(e)}')
+            Logger.error(f'Failed to run {str(choice)} » {str(e)}')
     else:
-        logger.error(f'Invalid option » {str(choice)}')
+        Logger.error(f'Invalid option » {str(choice)}')
 
-    logger.info('Finished running option', 'Main')
+    Logger.info('Finished running option', 'Main')
     input('')

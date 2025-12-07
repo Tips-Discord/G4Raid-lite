@@ -1,14 +1,14 @@
-from src import *
 from src.utils.files import files
-from src.utils.console import console
+from src.utils.console import Console
 from src.utils.threading import threading
 from src.utils.discord import discord
-from src.utils.logging import logger
+from src.utils.logging import Logger
 from src.utils.sessionmanager import client as Client
+from src import *
 
 class channelspammer:
     def __init__(self):
-        self.console = console('Channel Spammer')
+        self.console = Console('Channel Spammer')
         self.serverid = None
         self.channelid = None
         self.messages = []
@@ -29,7 +29,7 @@ class channelspammer:
                 'location': 'chat_input'
             })
             if not client.cookiejar:
-                logger.infolog(f'{client.maskedtoken} » Getting cookies')
+                Logger.infolog(f'{client.maskedtoken} » Getting cookies')
                 client.refreshcookies()
                 client.updatecookies(client.cookiejar, client.cookiestr)
 
@@ -54,30 +54,30 @@ class channelspammer:
                 )
 
                 if r.status_code == 200:
-                    logger.success(f'{client.maskedtoken} » Sent')
+                    Logger.success(f'{client.maskedtoken} » Sent')
 
                 elif 'retry_after' in r.text:
                     ratelimit = r.json().get('retry_after', 1.5)
-                    logger.ratelimit(f'{client.maskedtoken} » {ratelimit}s')
+                    Logger.ratelimit(f'{client.maskedtoken} » {ratelimit}s')
                     discord.sleep(ratelimit)
 
                 elif 'Try again later' in r.text:
-                    logger.ratelimit(f'{client.maskedtoken} » 5s')
+                    Logger.ratelimit(f'{client.maskedtoken} » 5s')
                     discord.sleep(5)
 
                 elif 'Cloudflare' in r.text:
-                    logger.cloudflare(f'{client.maskedtoken} » 10s')
+                    Logger.cloudflare(f'{client.maskedtoken} » 10s')
                     discord.sleep(10)
 
                 else:
                     e, etype = discord.errordatabase(r.text) 
-                    logger.error(f'{client.maskedtoken} » {e}')
+                    Logger.error(f'{client.maskedtoken} » {e}')
                     break
                     
                 discord.sleep(self.delay)
 
         except Exception as e:
-            logger.error(f'{client.maskedtoken} » {e}')
+            Logger.error(f'{client.maskedtoken} » {e}')
 
     def run(self, token):
         client = Client(token)
@@ -98,15 +98,15 @@ class channelspammer:
 
         self.doping = self.console.input('Add @user pings? (random users)', bool)
         if self.doping:
-            logger.info('Pings are anvaible in the paid version only')
-            logger.info('Pings are anvaible in the paid version only')
-            logger.info('Pings are anvaible in the paid version only')
+            Logger.info('Pings are anvaible in the paid version only')
+            Logger.info('Pings are anvaible in the paid version only')
+            Logger.info('Pings are anvaible in the paid version only')
 
         if self.console.input('Use messages from a file', bool):
-            logger.info('Choose the file with ur messages');time.sleep(1)
+            Logger.info('Choose the file with ur messages');time.sleep(1)
             path = files.choosefile()
             if not os.path.exists(path):
-                logger.error('This file does not exist')
+                Logger.error('This file does not exist')
                 self.messages = [self.console.input('Message', str)]
 
             else:
@@ -117,9 +117,9 @@ class channelspammer:
 
         self.tts = self.console.input('TTS', bool)
         self.delay = self.console.input('Delay', float)
-        logger.info('No watermark is anvaible in the paid version only')
-        logger.info('No watermark is anvaible in the paid version only')
-        logger.info('No watermark is anvaible in the paid version only')
+        Logger.info('No watermark is anvaible in the paid version only')
+        Logger.info('No watermark is anvaible in the paid version only')
+        Logger.info('No watermark is anvaible in the paid version only')
 
         tokens = [token.token for token in files.gettokens()]
             
@@ -128,5 +128,3 @@ class channelspammer:
             tokens=tokens,
             delay=0
         )
-
-        

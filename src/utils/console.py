@@ -1,5 +1,5 @@
 from src import *
-from src.utils.logging import logger
+from src.utils.logging import Logger
 
 class Console:
     def __init__(self, module: str = 'Console'):
@@ -16,14 +16,14 @@ class Console:
             sys.stdout.write(f"\033]0;{title}\007")
             sys.stdout.flush()
 
-    def _get_width(self) -> int:
+    def _get_width() -> int:
         return shutil.get_terminal_size(fallback=(120, 30)).columns
 
     def center(self, text: str) -> str:
         text = str(text)
         lines = text.split('\n')
         centered_lines = []
-        width = self._get_width()
+        width = Console._get_width()
 
         for line in lines:
             visible_line = self._ansi_escape.sub('', line)
@@ -46,7 +46,7 @@ class Console:
             visible_line = self._ansi_escape.sub('', line)
             max_content_width = max(max_content_width, len(visible_line))
             
-        term_width = self._get_width()
+        term_width = Console._get_width()
         padding = (term_width - max_content_width) // 2
         padding = max(0, padding)
         
@@ -135,7 +135,7 @@ class Console:
             if not result:
                 if expected == str:
                     return result
-                logger.info('Input required, please enter a value')
+                Logger.info('Input required, please enter a value')
                 continue
 
             if expected == bool:
@@ -145,7 +145,7 @@ class Console:
                 elif lower_res in ('n', 'no', 'false', '0'):
                     return False
                 else:
-                    logger.info('Invalid input. Use y/yes or n/no')
+                    Logger.info('Invalid input. Use y/yes or n/no')
                     continue
             
             if expected == str:
@@ -155,11 +155,11 @@ class Console:
                 return expected(result)
             except ValueError:
                 if expected == int:
-                    logger.info('Please enter a whole number (e.g. 1, 42)')
+                    Logger.info('Please enter a whole number (e.g. 1, 42)')
                 elif expected == float:
-                    logger.info('Please enter a decimal number (e.g. 1.5, 3.14)')
+                    Logger.info('Please enter a decimal number (e.g. 1.5, 3.14)')
                 else:
-                    logger.info(f'Invalid format expected {expected.__name__}')
+                    Logger.info(f'Invalid format expected {expected.__name__}')
 
     def prep(self):
         self.cls()
@@ -179,5 +179,3 @@ class Console:
         self.prep()
         menu_items = list(options.keys()) + ['Back']
         self.createmenu(menu_items)
-
-console = Console

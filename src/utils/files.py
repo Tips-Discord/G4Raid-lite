@@ -1,5 +1,5 @@
 from src import *
-from src.utils.logging import logger
+from src.utils.logging import Logger
 
 Token = namedtuple('Token', ['email', 'password', 'token'])
 
@@ -24,11 +24,11 @@ class files:
                     os.makedirs(path)
 
             except PermissionError as e:
-                logger.error(f'Permission denied creating files/directories, please move G4Raid-lite to a different place desktop/own folder best » {e}')
+                Logger.error(f'Permission denied creating files/directories, please move G4Raid-lite to a different place desktop/own folder best » {e}')
                 input('')
 
             except Exception as e:
-                logger.error(f'Error creating files » {e}')
+                Logger.error(f'Error creating files » {e}')
                 input('')
         
         for path in folderstomake:
@@ -38,11 +38,11 @@ class files:
                         f.write('')
     
             except PermissionError as e:
-                logger.error(f'Permission denied creating files/directories, please move G4Raid-lite to a different place desktop/own folder best » {e}')
+                Logger.error(f'Permission denied creating files/directories, please move G4Raid-lite to a different place desktop/own folder best » {e}')
                 input('')
 
             except Exception as e:
-                logger.error(f'Error creating files » {e}')
+                Logger.error(f'Error creating files » {e}')
                 input('')
 
     @staticmethod
@@ -58,7 +58,7 @@ class files:
 
                     coloncount = line.count(':')
                     if coloncount == 1 or coloncount > 2:
-                        logger.error(f'Invalid token format the correct format is EMAIL:PASSWORD:TOKEN if this IS your format keep the token only as ur supplier is a idiot » {line}')
+                        Logger.error(f'Invalid token format the correct format is EMAIL:PASSWORD:TOKEN if this IS your format keep the token only as ur supplier is a idiot » {line}')
 
                     parts = line.split(':', 2)
                     if len(parts) == 3:
@@ -73,11 +73,11 @@ class files:
                     random.shuffle(tokens)
         
         except PermissionError as e:
-            logger.error(f'Permission denied reading files/directories, please move G4Raid to a different place desktop/own folder best » {e}')
+            Logger.error(f'Permission denied reading files/directories, please move G4Raid to a different place desktop/own folder best » {e}')
             input('')
 
         except Exception as e:
-            logger.error(f'Error reading files » {e}')
+            Logger.error(f'Error reading files » {e}')
             input('')
 
         return tokens
@@ -102,4 +102,3 @@ class files:
         path = filedialog.askdirectory(title='Select a folder')
         root.destroy()
         return path
-

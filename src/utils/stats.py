@@ -1,5 +1,5 @@
 from src import *
-from src.utils.logging import logger
+from src.utils.logging import Logger
 
 class StatsManager:
     SUCCEEDED = 'succeeded'
@@ -7,16 +7,20 @@ class StatsManager:
     FAILED = 'failed'
     REASONS = 'reasons'
 
-    def __init__(self, session_name: str):
+    def __init__(self, session_name: str, categories: list = None):
         self.session_name = session_name
         self.path = os.path.join('data', 'stats', session_name)
         
         self.data = {
-            self.SUCCEEDED: [],
-            self.CAPTCHA: [],
-            self.FAILED: [],
             self.REASONS: []
         }
+        if categories:
+            for category in categories:
+                self.data[category] = []
+        else:
+            self.data[self.SUCCEEDED] = []
+            self.data[self.CAPTCHA] = []
+            self.data[self.FAILED] = []
         
         self._lock = threadinglib.Lock()
         self._initialize_storage()
@@ -27,7 +31,7 @@ class StatsManager:
                 shutil.rmtree(self.path)
             os.makedirs(self.path, exist_ok=True)
         except Exception as e:
-            logger.error(f"Failed to initialize stats folder: {e}")
+            Logger.error(f"Failed to initialize stats folder: {e}")
 
     def get_timestamp(self):
         return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -61,5 +65,3 @@ class StatsManager:
                 f.write(content + '\n')
         except Exception as e:
             print(f"[Stats Error] Could not write to {category}: {e}")
-
-stats = StatsManager

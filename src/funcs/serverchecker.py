@@ -1,23 +1,23 @@
 from src import *
 from src.utils.files import files
-from src.utils.console import console
+from src.utils.console import Console
 from src.utils.threading import threading
 from src.utils.discord import discord
-from src.utils.stats import stats
-from src.utils.logging import logger
+from src.utils.stats import StatsManager
+from src.utils.logging import Logger
 from src.utils.sessionmanager import client as Client
 
 class serverchecker:
     def __init__(self):
-        self.console = console('Server Checker')
-        self.stats = stats('Server_Checker', [stats.SUCCEDED, stats.FAILED])
+        self.console = Console('Server Checker')
+        self.stats = StatsManager('Server_Checker', [StatsManager.SUCCEEDED, StatsManager.FAILED])
         self.serverid = None
     
     def leave(self, client: Client):
         try:
             client.cleanxcontent()
             if not client.cookiejar:
-                logger.infolog(f'{client.maskedtoken} » Getting cookies')
+                Logger.infolog(f'{client.maskedtoken} » Getting cookies')
                 client.refreshcookies()
                 client.updatecookies(client.cookiejar, client.cookiestr)
 
@@ -28,37 +28,37 @@ class serverchecker:
                 )
 
                 if r.status_code == 200:
-                    logger.success(f'{client.maskedtoken} » Inside')
-                    self.stats.append(stats.SUCCEDED, client.token)
+                    Logger.success(f'{client.maskedtoken} » Inside')
+                    self.stats.append(StatsManager.SUCCEEDED, client.token)
                     break
 
                 elif 'retry_after' in r.text:
                     ratelimit = r.json().get('retry_after', 1.5)
-                    logger.ratelimit(f'{client.maskedtoken} » {ratelimit}s')
+                    Logger.ratelimit(f'{client.maskedtoken} » {ratelimit}s')
                     discord.sleep(ratelimit)
 
                 elif 'Try again later' in r.text:
-                    logger.ratelimit(f'{client.maskedtoken} » 5s')
+                    Logger.ratelimit(f'{client.maskedtoken} » 5s')
                     discord.sleep(5)
 
                 elif 'Cloudflare' in r.text:
-                    logger.cloudflare(f'{client.maskedtoken} » 10s')
+                    Logger.cloudflare(f'{client.maskedtoken} » 10s')
                     discord.sleep(10)
 
                 elif 'You need to verify' in r.text:
-                    logger.locked(f'{client.maskedtoken} Locked/Flagged')
-                    self.stats.append(stats.FAILED, client.token, 'Locked/Flagged')
+                    Logger.locked(f'{client.maskedtoken} Locked/Flagged')
+                    self.stats.append(StatsManager.FAILED, client.token, 'Locked/Flagged')
                     break
 
                 else:
                     e, etype = discord.errordatabase(r.text) 
-                    logger.error(f'{client.maskedtoken} » {e}')
-                    self.stats.append(stats.FAILED, client.token, e)
+                    Logger.error(f'{client.maskedtoken} » {e}')
+                    self.stats.append(StatsManager.FAILED, client.token, e)
                     break
 
         except Exception as e:
-            logger.error(f'{client.maskedtoken} » {e}')
-            self.stats.append(stats.FAILED, client.token, e)
+            Logger.error(f'{client.maskedtoken} » {e}')
+            self.stats.append(StatsManager.FAILED, client.token, e)
 
     def run(self, token):
         client = Client(token)
@@ -68,7 +68,7 @@ class serverchecker:
         self.console.prep()
         self.serverid = self.console.input('Server ID', str)
         self.delay = self.console.input('Delay', float)
-        logger.info(f'Stats will be saved to {self.stats.path}')
+        Logger.info(f'Stats will be saved to {self.stats.path}')
 
         threading(
             func=self.run,

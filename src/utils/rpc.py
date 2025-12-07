@@ -52,5 +52,3 @@ class DiscordRPC:
             )
         except Exception:
             self.connected = False
-
-RPC = DiscordRPC()

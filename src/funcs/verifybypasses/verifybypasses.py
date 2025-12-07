@@ -1,28 +1,28 @@
 from src import *
-from src.utils.console import console
-from src.utils.logging import logger
+from src.utils.console import Console
+from src.utils.logging import Logger
 
 class verifybypasses:
     def __init__(self):
-        self.console = console('Verify Bypasses')
+        self.console = Console('Verify Bypasses')
     
     def reaction(self):
-        logger.paidonly()
+        Logger.paidonly()
 
     def button(self):
-        logger.paidonly()
+        Logger.paidonly()
 
     def rule(self):
-        logger.paidonly()
+        Logger.paidonly()
 
     def onboarding(self):
-        logger.paidonly()
+        Logger.paidonly()
 
     def restorecord(self):
-        logger.paidonly()
+        Logger.paidonly()
 
     def authgg(self):
-        logger.paidonly()
+        Logger.paidonly()
 
     def menu(self):
         menu = {

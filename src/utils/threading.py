@@ -1,5 +1,5 @@
 from src import *
-from src.utils.logging import logger
+from src.utils.logging import Logger
 from src.utils.errorhandler import errorhandler
 from src.utils.discord import discord
 
@@ -21,7 +21,7 @@ class threading:
 
     def start(self):
         if not self.tokens:
-            logger.warning("No tokens have been passed.")
+            Logger.warning("No tokens have been passed.")
             return
 
         try:
@@ -40,4 +40,4 @@ class threading:
                 thread.join()
 
         except KeyboardInterrupt:
-            logger.info("Interrupted. Waiting for pending threads...")
+            Logger.info("Interrupted. Waiting for pending threads...")

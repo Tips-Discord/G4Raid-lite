@@ -1,20 +1,20 @@
 from src import *
-from src.utils.console import console
-from src.utils.logging import logger
+from src.utils.console import Console
+from src.utils.logging import Logger
 
 class suppliers:
     def __init__(self):
-        self.console = console('Suppliers')
+        self.console = Console('Suppliers')
 
     def tokens(self):
         supp = requests.get('https://g4tools.cc/api/tokensupplier').text
-        logger.info('IMPORTANT > AFTER BUYING THEM WAIT 1-2 DAYS BEFORE USE YES EVEN WITH AGED ONES', 'Suppliers')
-        logger.info(f'Tokens are available at {supp}', 'Suppliers')
+        Logger.info('IMPORTANT > AFTER BUYING THEM WAIT 1-2 DAYS BEFORE USE YES EVEN WITH AGED ONES', 'Suppliers')
+        Logger.info(f'Tokens are available at {supp}', 'Suppliers')
         webbrowser.open(supp)
 
     def proxies(self):
         supp = requests.get('https://g4tools.cc/api/proxysupplier').text
-        logger.info(f'Proxies are available at {supp}', 'Suppliers')
+        Logger.info(f'Proxies are available at {supp}', 'Suppliers')
         webbrowser.open(supp)
     
     def menu(self):

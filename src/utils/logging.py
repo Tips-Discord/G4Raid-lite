@@ -81,6 +81,9 @@ class Logger:
         if get.debug.enabled():
             Logger._log("DEBUG", co.debug, text)
 
+    @staticmethod
+    def paidonly():
+        InterfaceUtils.show_paid_only_popup()
 
 class InterfaceUtils:
     @staticmethod
@@ -140,5 +143,3 @@ class InterfaceUtils:
 
         fade_in(root)
         root.mainloop()
-
-logger = Logger
