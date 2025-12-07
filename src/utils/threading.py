@@ -1,6 +1,7 @@
 from src import *
 from src.utils.logging import logger
 from src.utils.errorhandler import errorhandler
+from src.utils.discord import discord
 
 class SafeThread(threadinglib.Thread):
     def run(self):
@@ -33,7 +34,7 @@ class threading:
                 t.start()
 
                 if self.delay > 0:
-                    time.sleep(self.delay)
+                    discord.sleep(self.delay)
 
             for thread in self.threads:
                 thread.join()
