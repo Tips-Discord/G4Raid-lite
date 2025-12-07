@@ -1,66 +1,65 @@
 from src import *
 from src.utils.logging import logger
 
-
-class stats:
-    SUCCEDED = 'succeeded'
+class StatsManager:
+    SUCCEEDED = 'succeeded'
     CAPTCHA = 'captcha'
     FAILED = 'failed'
     REASONS = 'reasons'
 
-    def __init__(self, name, categories=None):
-        self.categories = categories or [self.SUCCEDED, self.CAPTCHA, self.FAILED]
-        if self.REASONS not in self.categories:
-            self.categories.append(self.REASONS)
-        self.data = {}
-        self.path = os.path.join('data', 'stats', name)
+    def __init__(self, session_name: str):
+        self.session_name = session_name
+        self.path = os.path.join('data', 'stats', session_name)
+        
+        self.data = {
+            self.SUCCEEDED: [],
+            self.CAPTCHA: [],
+            self.FAILED: [],
+            self.REASONS: []
+        }
+        
         self._lock = threadinglib.Lock()
-        for category in self.categories:
-            self.data[category] = []
-        self.reset()
-        shutil.rmtree(self.path, ignore_errors=True)
-        os.makedirs(self.path, exist_ok=True)
-   
-    def reset(self):
-        with self._lock:
-            for category in self.categories:
-                self.data[category] = []
-                filepath = os.path.join(self.path, f'{category}.txt')
-                if os.path.exists(filepath):
-                    os.remove(filepath)
-   
-    def getdatetime(self):
-        return dt.now().strftime('%Y-%m-%d %H:%M:%S')
-   
-    def append(self, category, token, error=None):
-        with self._lock:
-            if category not in self.categories:
-                self.categories.append(category)
-                self.data[category] = []
-            if self.REASONS not in self.categories:
-                self.categories.append(self.REASONS)
-                self.data[self.REASONS] = []
-            
-            self.data[category].append(token)
-            if error:
-                self.data[self.REASONS].append(f'{token} » {error}')
-            
-            self.savecategorytofile(category)
-            
-            if error:
-                self.savecategorytofile(self.REASONS)
-    
-    def savecategorytofile(self, category):
-        filepath = os.path.join(self.path, f'{category}.txt')
-        tempfilepath = filepath + '.tmp'
+        self._initialize_storage()
+
+    def _initialize_storage(self):
         try:
-            with open(tempfilepath, 'w', encoding='utf-8', errors='ignore') as f:
-                f.write('\n'.join(self.data[category]))
-            if os.path.exists(filepath):
-                os.remove(filepath)
-            os.rename(tempfilepath, filepath)
-            
+            if os.path.exists(self.path):
+                shutil.rmtree(self.path)
+            os.makedirs(self.path, exist_ok=True)
         except Exception as e:
-            logger.error(f'Failed to save stats for {category} » {e}')
-            if os.path.exists(tempfilepath):
-                os.remove(tempfilepath)
+            logger.error(f"Failed to initialize stats folder: {e}")
+
+    def get_timestamp(self):
+        return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    def get_count(self, category: str) -> int:
+        with self._lock:
+            return len(self.data.get(category, []))
+
+    def append(self, category: str, token: str, error: str = None):
+        with self._lock:
+            if category not in self.data:
+                self.data[category] = []
+
+            self.data[category].append(token)
+
+            self._write_to_file(category, token)
+
+            if error:
+                reason_entry = f'{token} » {error}'
+                
+                if self.REASONS not in self.data:
+                    self.data[self.REASONS] = []
+                self.data[self.REASONS].append(reason_entry)
+                
+                self._write_to_file(self.REASONS, reason_entry)
+
+    def _write_to_file(self, category: str, content: str):
+        filepath = os.path.join(self.path, f'{category}.txt')
+        try:
+            with open(filepath, 'a', encoding='utf-8') as f:
+                f.write(content + '\n')
+        except Exception as e:
+            print(f"[Stats Error] Could not write to {category}: {e}")
+
+stats = StatsManager
