@@ -5,6 +5,7 @@ if os.name == 'nt':
 else:
     os.system('clear')
     sys.stdout.write(f"]2;G4Raid-lite - launching...")
+
 import base64
 import concurrent.futures
 import copy
@@ -14,6 +15,7 @@ import re
 import shutil
 import socket
 import string
+import sys
 import threading as threadinglib
 import time
 import traceback
@@ -21,21 +23,24 @@ import uuid
 import webbrowser
 from collections import defaultdict, namedtuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime as dt, timedelta, timezone
-from tkinter import Frame, Tk, filedialog, messagebox, ttk
-from tkinter.filedialog import askdirectory, askopenfilename
+from datetime import datetime, timedelta, timezone
+from datetime import datetime as dt
 from typing import Callable, Dict, List, Union
 from urllib.parse import quote, urlparse
 
 import curl_cffi as curlcffi_
 import pyperclip
 import requests
+import tkinter as tk
 import urllib3
 import websocket
 from curl_cffi import exceptions as cfex
 from curl_cffi import requests as curlcffi
 from pypresence import Presence
 from requests.cookies import RequestsCookieJar
+from tkinter import Frame, Tk, filedialog, messagebox, ttk
+from tkinter.filedialog import askdirectory, askopenfilename
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def rgb(r, g, b):
