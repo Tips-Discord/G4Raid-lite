@@ -5,37 +5,37 @@ if os.name == 'nt':
 else:
     os.system('clear')
     sys.stdout.write(f"]2;G4Raid-lite - launching...")
-import time
-import copy
-import uuid
-import json
-import socket
 import base64
-import string
-import random
-import pyperclip
-from curl_cffi import exceptions as cfex
-import re
-import traceback
-import shutil
-import threading as threadinglib
-import webbrowser
-import requests
-import websocket
 import concurrent.futures
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import curl_cffi as curlcffi_
-from pypresence import Presence
-from curl_cffi import requests as curlcffi
-from datetime import datetime as dt, timedelta, timezone
-from urllib.parse import urlparse, quote
-from collections import defaultdict, namedtuple
-from tkinter.filedialog import askopenfilename, askdirectory
-from requests.cookies import RequestsCookieJar
+import copy
 import json
+import random
+import re
+import shutil
+import socket
+import string
+import threading as threadinglib
+import time
+import traceback
+import uuid
+import webbrowser
+from collections import defaultdict, namedtuple
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime as dt, timedelta, timezone
+from tkinter import Frame, Tk, filedialog, messagebox, ttk
+from tkinter.filedialog import askdirectory, askopenfilename
+from typing import Callable, Dict, List, Union
+from urllib.parse import quote, urlparse
+
+import curl_cffi as curlcffi_
+import pyperclip
+import requests
 import urllib3
-from tkinter.filedialog import askopenfilename, askdirectory
-from tkinter import ttk, Frame, Tk, filedialog, messagebox
+import websocket
+from curl_cffi import exceptions as cfex
+from curl_cffi import requests as curlcffi
+from pypresence import Presence
+from requests.cookies import RequestsCookieJar
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def rgb(r, g, b):
