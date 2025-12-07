@@ -29,6 +29,10 @@ if %errorlevel% neq 0 (
     echo.
     echo Script crashed.
 
+    if exist "%VENV_NAME%\Lib\site-packages" (
+        exit /b
+    )
+
     if "!TRIED_FIX!"=="0" (
         echo This might be a missing library. Attempting to install...
 
