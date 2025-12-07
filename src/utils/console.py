@@ -6,10 +6,13 @@ class console:
         self.module = module
 
     def cls(self):
-        os.system('cls')
+        os.system('cls' if os.name == 'nt' else 'clear')
 
     def title(self, title):
-        os.system(f'title {title}')
+        if os.name == 'nt':
+            os.system(f'title {title}')
+        else:
+            sys.stdout.write(f"]2;{title}")
 
     def center(self, text, size):
         text = str(text)
