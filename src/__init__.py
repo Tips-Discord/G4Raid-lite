@@ -1,6 +1,10 @@
 import sys, os
-os.system('cls')
-os.system('title G4Raid-lite - launching...')
+if os.name == 'nt':
+    os.system('cls')
+    os.system('title G4Raid-lite - launching...')
+else:
+    os.system('clear')
+    sys.stdout.write(f"]2;G4Raid-lite - launching...")
 import time
 import copy
 import uuid
