@@ -1,0 +1,6 @@
+pyperclip
+curl_cffi
+requests
+websocket-client
+pypresence
+urllib3
