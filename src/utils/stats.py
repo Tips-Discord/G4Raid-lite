@@ -13,7 +13,7 @@ class stats:
         if self.REASONS not in self.categories:
             self.categories.append(self.REASONS)
         self.data = {}
-        self.path = f'data\\stats\\{name}'
+        self.path = os.path.join('data', 'stats', name)
         self._lock = threadinglib.Lock()
         for category in self.categories:
             self.data[category] = []
@@ -25,7 +25,7 @@ class stats:
         with self._lock:
             for category in self.categories:
                 self.data[category] = []
-                filepath = f'{self.path}\\{category}.txt'
+                filepath = os.path.join(self.path, f'{category}.txt')
                 if os.path.exists(filepath):
                     os.remove(filepath)
    
