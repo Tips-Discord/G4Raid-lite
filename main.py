@@ -14,10 +14,11 @@ from src.utils.console import console
 from src.utils.files import files; files.check()
 from src.utils.config import get
 from src.utils.logging import logger
+from src.utils.discord import discord
 from src.funcs import *
 console = console('Main')
 
-time.sleep(0.5)
+discord.sleep(0.5)
 console.cls()
 console.title('G4Raid - g4tools.cc - discord.gg/spamming - Made by r3ci')
 console.printbanner()
