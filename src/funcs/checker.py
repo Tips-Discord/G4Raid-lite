@@ -84,5 +84,5 @@ class checker:
         
         replace = self.console.input('Replace tokens.txt with valid tokens ONLY', bool)
         if replace:
-            with open('data\\tokens.txt', 'w', encoding='utf-8', errors='ignore') as f:
+            with open(os.path.join('data', 'tokens.txt'), 'w', encoding='utf-8', errors='ignore') as f:
                 f.write('\n'.join(format_token(t) for t in self.valids))
