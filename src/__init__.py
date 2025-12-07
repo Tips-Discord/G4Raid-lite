@@ -25,7 +25,7 @@ from collections import defaultdict, namedtuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 from datetime import datetime as dt
-from typing import Callable, Dict, List, Union
+from typing import Callable, Dict, List, Union, Any
 from urllib.parse import quote, urlparse
 
 import curl_cffi as curlcffi_
