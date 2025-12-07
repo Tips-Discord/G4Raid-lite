@@ -1,164 +1,144 @@
 from src import *
 from src.utils.config import get
 
-class logger:
-    def timestamp():
-        return dt.now().strftime('%H:%M:%S ')
+class Logger:
+    @staticmethod
+    def _timestamp():
+        return datetime.now().strftime('%H:%M:%S ')
 
-    def info(text, text2=None):
-        if text2:
-            first = f'{co.main}[{co.reset}{text2}{co.main}] {co.reset}»{co.reset} '
-        else:
-            first = ''
+    @staticmethod
+    def _format_arrow(text, color_code):
+        return text.replace('»', f'{co.reset}»{color_code}') \
+                   .replace('«', f'{co.reset}«{color_code}')
 
-        log = f'{co.main}[{co.reset}{text}{co.main}]{co.reset}'
+    @staticmethod
+    def _log(label, color_code, text):
+        ts = Logger._timestamp()
+        
+        # Base format
+        # [TIMESTAMP] [LABEL] » [TEXT]
+        log_msg = (
+            f"{co.black}{ts}"
+            f"{color_code}{label} {co.reset}»{co.reset} "
+            f"{color_code}[{text}]{co.reset}"
+        )
 
-        for char in ['»', '«']:
-            log = log.replace(char, f'{co.main}{char}{co.reset}')
+        log_msg = Logger._format_arrow(log_msg, color_code)
+        
+        print(log_msg)
 
-        log = f'{first}{log}'
-            
-        print(log)
 
+    @staticmethod
+    def info(text, subtext=None):
+        prefix = ''
+        if subtext:
+            prefix = f'{co.main}[{co.reset}{subtext}{co.main}] {co.reset}»{co.reset} '
+        
+        log_msg = f'{prefix}{co.main}[{co.reset}{text}{co.main}]{co.reset}'
+        log_msg = log_msg.replace('»', f'{co.main}»{co.reset}')
+        log_msg = log_msg.replace('«', f'{co.main}«{co.reset}')
+        
+        print(log_msg)
+
+    @staticmethod
     def infolog(text):
-        log = f'{co.black}{logger.timestamp()}{co.infolog}INFO {co.reset}»{co.reset} {co.infolog}[{text}]{co.reset}'
+        Logger._log("INFO", co.infolog, text)
 
-        for char in ['»', '«']:
-            log = log.replace(char, f'{co.reset}{char}{co.infolog}')
-            
-        print(log)
-
+    @staticmethod
     def success(text):
-        log = f'{co.black}{logger.timestamp()}{co.success}SUCCESS {co.reset}»{co.reset} {co.success}[{text}]{co.reset}'
+        Logger._log("SUCCESS", co.success, text)
 
-        for char in ['»', '«']:
-            log = log.replace(char, f'{co.reset}{char}{co.success}')
-            
-        print(log)
+    @staticmethod
+    def error(text):
+        Logger._log("ERROR", co.error, text)
 
-    def error(text):                                      
-        log = f'{co.black}{logger.timestamp()}{co.error}ERROR {co.reset}»{co.reset} {co.error}[{text}]{co.reset}'
+    @staticmethod
+    def warning(text):
+        Logger._log("WARNING", co.warning, text)
 
-        for char in ['»', '«']:
-            log = log.replace(char, f'{co.reset}{char}{co.error}')
-            
-        print(log)
+    @staticmethod
+    def locked(text):
+        Logger._log("LOCKED", co.locked, text)
 
-    def locked(text):                                      
-        log = f'{co.black}{logger.timestamp()}{co.locked}LOCKED {co.reset}»{co.reset} {co.locked}[{text}]{co.reset}'
+    @staticmethod
+    def ratelimit(text):
+        Logger._log("RATELIMIT", co.ratelimit, text)
 
-        for char in ['»', '«']:
-            log = log.replace(char, f'{co.reset}{char}{co.locked}')
-            
-        print(log)
+    @staticmethod
+    def cloudflare(text):
+        Logger._log("CLOUDFLARE", co.cloudflare, text)
 
-    def debug(text): 
-        if get.debug.enabled():                                     
-            log = f'{co.black}{logger.timestamp()}{co.debug}DEBUG {co.reset}»{co.reset} {co.debug}[{text}]{co.reset}'
+    @staticmethod
+    def solver(text):
+        Logger._log("SOLVER", co.solver, text)
 
-            for char in ['»', '«']:
-                log = log.replace(char, f'{co.reset}{char}{co.debug}')
-                
-            print(log)
+    @staticmethod
+    def captcha(text):
+        Logger._log("CAPTCHA", co.captcha, text)
 
-    def warning(text):                                      
-        log = f'{co.black}{logger.timestamp()}{co.warning}WARNING {co.reset}»{co.reset} {co.warning}[{text}]{co.reset}'
+    @staticmethod
+    def debug(text):
+        if get.debug.enabled():
+            Logger._log("DEBUG", co.debug, text)
 
-        for char in ['»', '«']:
-            log = log.replace(char, f'{co.reset}{char}{co.warning}')
-            
-        print(log)
 
-    def ratelimit(text):                                      
-        log = f'{co.black}{logger.timestamp()}{co.ratelimit}RATELIMIT {co.reset}»{co.reset} {co.ratelimit}[{text}]{co.reset}'
+class InterfaceUtils:
+    @staticmethod
+    def show_paid_only_popup():
+        def fade_in(window, alpha=0):
+            alpha = min(alpha + 0.05, 1.0)
+            window.attributes('-alpha', alpha)
+            if alpha < 1:
+                window.after(10, fade_in, window, alpha)
 
-        for char in ['»', '«']:
-            log = log.replace(char, f'{co.reset}{char}{co.ratelimit}')
-            
-        print(log)
-
-    def cloudflare(text):                                      
-        log = f'{co.black}{logger.timestamp()}{co.cloudflare}CLOUDFLARE {co.reset}»{co.reset} {co.cloudflare}[{text}]{co.reset}'
-
-        for char in ['»', '«']:
-            log = log.replace(char, f'{co.reset}{char}{co.cloudflare}')
-            
-        print(log)
-
-    def solver(text):                                      
-        log = f'{co.black}{logger.timestamp()}{co.solver}SOLVER {co.reset}»{co.reset} {co.solver}[{text}]{co.reset}'
-
-        for char in ['»', '«']:
-            log = log.replace(char, f'{co.reset}{char}{co.solver}')
-            
-        print(log)
-
-    def captcha(text):                                      
-        log = f'{co.black}{logger.timestamp()}{co.captcha}CAPTCHA {co.reset}»{co.reset} {co.captcha}[{text}]{co.reset}'
-
-        for char in ['»', '«']:
-            log = log.replace(char, f'{co.reset}{char}{co.captcha}')
-            
-        print(log)
-
-    def paidonly():
-        def fadein(win, alpha=0):
-            alpha = round(alpha + 0.05, 2)
-            if alpha <= 1:
-                win.attributes('-alpha', alpha)
-                win.after(10, fadein, win, alpha)
-
-        def close(win, alpha=1):
-            alpha = round(alpha - 0.05, 2)
+        def fade_out(window, alpha=1):
+            alpha = max(alpha - 0.05, 0)
+            window.attributes('-alpha', alpha)
             if alpha > 0:
-                win.attributes('-alpha', alpha)
-                win.after(10, close, win, alpha)
+                window.after(10, fade_out, window, alpha)
             else:
-                win.destroy()
+                window.destroy()
 
-        def onok():
-            close(root)
-
-        def ongetpaid():
+        def open_shop():
             webbrowser.open('https://g4tools.cc')
-            close(root)
+            fade_out(root)
 
-        root = Tk()
-        root.title('')
+        # UI Setup
+        root = tk.Tk()
         root.overrideredirect(True)
-        root.attributes('-topmost', True)
-        root.attributes('-alpha', 0)
+        root.attributes('-topmost', True, '-alpha', 0)
         root.configure(bg='#000000')
 
-        outer = Frame(root, bg='#000000')
-        outer.pack(padx=2, pady=2)
+        # Calculate Center Position
+        root.update_idletasks()
+        width, height = 300, 150 #
+        x = (root.winfo_screenwidth() // 2) - (width // 2)
+        y = (root.winfo_screenheight() // 2) - (height // 2)
+        root.geometry(f'+{x}+{y}')
 
-        inner = Frame(outer, bg='#1e1e1e')
-        inner.pack()
+        # Styling
+        outer = tk.Frame(root, bg='#000000')
+        outer.pack(padx=2, pady=2, fill='both', expand=True)
+        
+        inner = tk.Frame(outer, bg='#1e1e1e')
+        inner.pack(fill='both', expand=True)
 
         style = ttk.Style()
         style.theme_use('clam')
         style.configure('TLabel', background='#1e1e1e', foreground='#ffffff', font=('Segoe UI', 11))
-        style.configure('TButton', font=('Segoe UI', 10), foreground='#ffffff', background='#2d2d30', borderwidth=0, padding=6)
-        style.map('TButton',
-            background=[('active', '#3e3e42')],
-            relief=[('pressed', 'sunken'), ('!pressed', 'raised')]
-        )
+        style.configure('TButton', font=('Segoe UI', 10), foreground='#ffffff', background='#2d2d30', borderwidth=0)
+        style.map('TButton', background=[('active', '#3e3e42')])
 
-        ttk.Label(inner, text='This is a paid only feature', anchor='center', justify='center').pack(padx=20, pady=(20, 15))
+        # Content
+        ttk.Label(inner, text='This is a paid only feature', justify='center').pack(pady=(25, 15))
 
-        btns = Frame(inner, bg='#1e1e1e')
-        btns.pack(pady=(0, 20))
+        btn_frame = tk.Frame(inner, bg='#1e1e1e')
+        btn_frame.pack(pady=(0, 20))
 
-        ttk.Button(btns, text='OK', command=onok).pack(side='left', padx=5)
-        ttk.Button(btns, text='Get Paid Now', command=ongetpaid).pack(side='left', padx=5)
+        ttk.Button(btn_frame, text='OK', command=lambda: fade_out(root)).pack(side='left', padx=5)
+        ttk.Button(btn_frame, text='Get Paid Now', command=open_shop).pack(side='left', padx=5)
 
-        root.update_idletasks()
-        w = root.winfo_width()
-        h = root.winfo_height()
-        x = (root.winfo_screenwidth() // 2) - (w // 2)
-        y = (root.winfo_screenheight() // 2) - (h // 2)
-        root.geometry(f'+{x}+{y}')
-
-        fadein(root)
+        fade_in(root)
         root.mainloop()
+
+logger = Logger
