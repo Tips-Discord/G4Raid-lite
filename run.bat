@@ -28,8 +28,9 @@ python %MAIN_SCRIPT%
 if %errorlevel% neq 0 (
     echo.
     echo Script crashed.
-
-    if exist "%VENV_NAME%\Lib\site-packages" (
+    
+    if exist "%VENV_NAME%\Lib\site-packages\curl_cffi" (
+        pause
         exit /b
     )
 
